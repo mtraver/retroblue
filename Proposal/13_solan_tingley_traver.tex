@@ -13,6 +13,7 @@
     \maketitle
 
     \section{Team members}
+        Michaels Tingley and Traver, and also guest starring Kyle Solan.
 
     \section{Project information}
         We plan to turn a rotary phone into a hands-free Bluetooth device that can pair with a cell phone and make and receive calls. It will behave exactly like a rotary phone plugged into an ordinary phone jack, except that calls are routed through a cell phone instead of a land line. Specifically, our phone will have the following functionality:
@@ -35,11 +36,21 @@
     \section{Diagram}
 
 
-    \section{Team Management}
+    \section{Team management}
+        The most important part of organization is to be flexible. At this point, the three of us all have about the same amount of knowledge, so there's no natural division of work. There are a few major areas that this can be divided into.
+        \begin{description}
+            \item[Rotary phone hardware.]
+                This will easily be the hardest part of the project. We have to disassemble parts of the rotary phone, figure out where to hook up wires to receive the dial pulses, and where to send the audio to allow it to be received by the handset. We will all spend a large amount of time doing research and tinkering with the physical phone to figure out how to get everything to work for this phase.
+            \item[Bluetooth communication.]
+                This will probably be an easier part of the project. We all have programming experience, and Traver has messed around with some of the Bluetooth technologies. Traver might assume more responsibility for this than the others.
+            \item[Physical assembly.]
+                Once we've figured out how the rotary phone works, it will be straightforward to turn a prototype into a more robust model. Tingley and Kyle can focus on getting this part of the project working.
+            \item[LED display.]
+                This is a reach goal for the project: we would like to mount an LED display that displays incoming phone number(s) and maybe caller contact information if available. Traver would be responsible for the Bluetooth communications and using the Arduino to send contact information signals, and Tingley and Kyle would be responsible for wiring the Arduino to an LED display and getting the hardware configured.
+        \end{description}
 
-
-    \section{Scope and Required Knowledge}
-
+    \section{Required knowledge}
+        We will be using a Bluetooth transceiver to transmit Bluetooth messages between the rotary phone and cell phone. None of us have worked with Bluetooth technologies before, and so we will need to learn Bluetooth protocols for this project. Our project will also require more advanced Arduino programming in order to interface with the Bluetooth transceiver. However, since our team is comprised of three senior Computer Science concentrators, we are not very concerned about the programming requirements of this project.
 
     \section{Parts List}
 
