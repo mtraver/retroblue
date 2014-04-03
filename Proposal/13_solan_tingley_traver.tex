@@ -14,7 +14,7 @@
     \maketitle
 
     \section{Team members}
-        Michaels Tingley and Traver, and also guest starring Kyle Solan.
+        Michaels Tingley and Traver, and also starring Kyle Solan.
 
     \section{Project information}
         We plan to turn a rotary phone into a hands-free Bluetooth device that can pair with a cell phone and make and receive calls. It will behave exactly like a rotary phone plugged into an ordinary phone jack, except that calls are routed through a cell phone instead of a land line. Specifically, our phone will have the following functionality:
@@ -68,6 +68,13 @@
         We will be using a Bluetooth transceiver to transmit Bluetooth messages between the rotary phone and cell phone. None of us have worked with Bluetooth technologies before, and so we will need to learn Bluetooth protocols for this project. Our project will also require more advanced Arduino programming in order to interface with the Bluetooth transceiver. However, since our team is comprised of three senior Computer Science concentrators, we are not very concerned about the programming requirements of this project.
 
     \section{Parts List}
+        \begin{description}
+            \item[Rotary phone.] A standard functional rotary telephone. As far as we can find, these are no longer manufactured, and most modern "vintage" telephones have fake rotary dials with touch-tone keys. We want the real thing, so we'll likely have to resort to eBay (\url{http://www.ebay.com/sch/i.html?_trksid=p2050601.m570.l1313.TR12.TRC2.A0.H0.Xrotary+phone&_nkw=rotary+phone&_sacat=0&_from=R40}). Estimated price is \$20-40 with shipping.
+            \item[Bluetooth audio module.] An integrated circuit with bluetooth transmitter and simple firmware. We intend to use the chipset to interface with a cell phone, with the ability to receive and dial/make calls. This means we need a chipset that supports the hands-free profile (HFP). We have found a chipset that meets these requirements and includes a very comprehensive user manual detailing operation and the chipset API (\url{http://www.digikey.com/product-detail/en/RN52-I%2FRM/RN52-I%2FRM-ND/3884028}). Price is \$23.30 before shipping.
+            \item[LCD module.] A small display for displaying caller ID information to users. We think 24 alphanumeric characters should be sufficient, and the following display will be adequate: \url{http://www.digikey.com/product-detail/en/NHD-0212WH-AYGH-JT%23/NHD-0212WH-AYGH-JT%23-ND/1701138}. Price is \$9.70 before shipping.
+            \item[Arduino board.] Needed as the logic center for our system. We will write a substantial amount of code to power the Arduino and use it to process data from the Bluetooth module and rotary phone and output it to the LCD/Bluetooth module.
+            \item[Misc. electrical components.] Wires, solder, op-amps, etc.
+        \end{description}
 
 
 \end{document}
