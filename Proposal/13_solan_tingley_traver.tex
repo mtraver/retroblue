@@ -22,12 +22,12 @@
 
         \begin{description}
             \item[Bluetooth pairing.] Users will be able to pair their cell phone with the rotary phone.
-            \item[Receiving calls.] When the user's cell phone receives a call, the rotary phone's original mechanical ringer will ring. The user will be able to simply pick up the handset to answer it.
+            \item[Receiving calls.] When the user's cell phone receives a call, the rotary phone's original mechanical ringer will ring. The user will be able to simply pick up the handset to answer the call.
             \item[Making calls.] To make a call, the user will be able to pick up the handset and dial a number on the phone's original dial. We will tap into the existing circuity/mechanics of the dial to detect the number dialed, and forward it along to the Bluetooth hardware to make the call. If we have time, we will also make a fake dial tone for increased authenticity.
-            \item[Display.] We would like to incorporate a small OLED screen that will display information such as pairing status and caller ID.
+            \item[Display.] We would like to incorporate a small display that will show information such as pairing status and caller ID.
         \end{description}
 
-        We think this project will be fun for the novelty factor, but we also think it will provide a good challenge and integrate several topics we've learned about in class. We will need to reverse-engineer the phone's rotor, handset, and ringer; connect these components to an Arduino; and program the Arduino to interface with a Bluetooth module.
+        We think this project will be fun for the novelty factor, but we also think it will provide a good challenge and integrate several topics we've learned about in class. We will need to reverse-engineer the phone's dial, handset, and ringer; connect these components to an Arduino; and program the Arduino to interface with a Bluetooth module and a display.
 
     \section{Resources}
     After Googling around about our idea, we found that Sparkfun had already done it. However, the tutorial they've posted uses a cell module instead of a Bluetooth module as well as a different controller than we will use. It does, though, include some information about hacking the phone's dial which will almost certainly be useful, and some circuit diagrams that might be useful depending on the innards of the phone we end up using.
@@ -39,6 +39,7 @@
         \url{https://github.com/thomasqbrady/BluetoothWatch/blob/master/ScreenTest/ScreenTest.ino}
     \end{description}
 
+    Despite the existing resources, we think that this will be a challenging and rewarding project. We do plan to go beyond what Sparkfun did by adding the display.
 
     \section{Schedule}
         \begin{description}
@@ -64,7 +65,7 @@
             \item[Physical assembly.]
                 Once we've figured out how the rotary phone works, it will be straightforward to turn a prototype into a more robust model. Tingley and Kyle can focus on getting this part of the project working.
             \item[LED display.]
-                This is a reach goal for the project: we would like to mount an LED display that displays incoming phone number(s) and maybe caller contact information if available. Traver would be responsible for the Bluetooth communications and using the Arduino to send contact information signals, and Tingley and Kyle would be responsible for wiring the Arduino to an LED display and getting the hardware configured.
+                We would like to mount an LED display that displays incoming phone number(s) and maybe caller contact information if available. Traver would be responsible for the Bluetooth communications and using the Arduino to send contact information signals, and Tingley and Kyle would be responsible for wiring the Arduino to an LED display and getting the hardware configured.
         \end{description}
 
     \section{Required knowledge}
