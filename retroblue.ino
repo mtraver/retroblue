@@ -17,6 +17,30 @@ const int hookPin = 4;
 const int eventPin = 7;
 const int resetPin = 12;
 
+/* other pins */
+const int solenoidPin = 5;
+
+/* ringing state */
+const int NOT_RINGING = 0;
+const int RINGING = 1;
+int ringState = NOT_RINGING;
+
+/* used to track if we're in a call so we can tell the Bluetooth
+ * module to end the call when the user hangs up the handset */
+const int NOT_IN_CALL = 0;
+const int IN_CALL = 1;
+int callState = NOT_IN_CALL;
+
+/* The number of times we've rung so far. */
+const int NUM_LOOP_ITERS_PER_RING_STATE = 2;
+
+/* The number of times we've passed in the loop in the current solenoidOut
+ * state. This is modulus NUM_LOOP_ITERS_PER_RING_STATE. */
+int loopItersInRingState = 0;
+
+/* true = solenoid extended; false = retracted */
+boolean solenoidOut = true;
+
 /* state of pulse switch
  * 1 during dialing pulse
  * 0 otherwise
@@ -76,6 +100,7 @@ void setup() {
   digitalWrite(eventPin, HIGH);
   
   pinMode(resetPin, OUTPUT);
+  pinMode(solenoidPin, OUTPUT);
 
   bluetooth.listen();
 }
@@ -88,7 +113,7 @@ void readState() {
 }
 
 /* properly terminates the given command, sends it to the Bluetooth module, and waits for a response */
-void issueCommand(String command, boolean checkForTerminator) {
+String issueCommand(String command, boolean checkForTerminator) {
   Serial.println("Issuing command '" + command + "'");
   
   bluetooth.print(command + COMMAND_TERMINATOR);
@@ -98,11 +123,12 @@ void issueCommand(String command, boolean checkForTerminator) {
   while (startTime + RESPONSE_WAIT_TIME > millis()) {
     if (bluetooth.available() > 0) buffer.concat(char(bluetooth.read()));
     
-    // TODO chop off terminator before returning response
     if (checkForTerminator && buffer.endsWith(RESPONSE_TERMINATOR)) {
       Serial.println("Got EOL. Printing buffer:");
       Serial.println(buffer);
-      return buffer;
+
+      /* chop off terminator before returning response */
+      return buffer.substring(0, buffer.length() - RESPONSE_TERMINATOR.length());
     }
   }
   
@@ -112,9 +138,6 @@ void issueCommand(String command, boolean checkForTerminator) {
 }
 
 String dialNumber(String num) {
-  // TODO remove when done debugging
-  num = "REDACTED";
-
   return issueCommand("A," + num, true);
 }
 
@@ -142,6 +165,43 @@ String getFirmwareVersion() {
   return issueCommand("V", false);
 }
 
+/* updates ringing/call status */
+void updateStatuses() {
+  String status = getStatus();
+  char lastChar = status.charAt(status.length() - 1);
+
+  if (lastChar == '5') {
+    Serial.println("Incoming call.");
+    startRinging();
+  } else {
+    stopRinging();
+  }
+
+  Serial.print("Processed status: ");
+  Serial.println(status);
+}
+
+void startRinging() {
+  ringState = RINGING;
+}
+
+void stopRinging() {
+  ringState = NOT_RINGING;
+  loopItersInRingState = 0;
+  solenoidOut = true;
+  digitalWrite(solenoidPin, solenoidOut ? LOW : HIGH);
+}
+
+void doRingTick() {
+  if (loopItersInRingState == 0) {
+    digitalWrite(solenoidPin, solenoidOut ? LOW : HIGH);
+    solenoidOut = !solenoidOut;
+  }
+  loopItersInRingState = (loopItersInRingState + 1) % NUM_LOOP_ITERS_PER_RING_STATE;
+  Serial.print("Solenoid state: ");
+  Serial.println(solenoidOut);
+}
+
 void loop() {
   readState();
 
@@ -151,14 +211,22 @@ void loop() {
   int event = digitalRead(eventPin);
   if (event == 0) {
     Serial.println("Event detected!");
+    updateStatuses();
+  }
 
-    String status = getStatus();
-    Serial.println(status);
+  if (ringState == RINGING) {
+    doRingTick();
   }
   
   if (hook == OFF_HOOK) {
     Serial.println("OFF hook");
     
+    if (ringState == RINGING) {
+      acceptCall();
+      stopRinging();
+      callState = IN_CALL;
+    }
+
     String numberString = "";
     boolean doDialNumber = true;
     
@@ -196,8 +264,14 @@ void loop() {
       
       readState();
       if (hook == ON_HOOK) {
-        /* phone was hung up, so break */
         Serial.println("hung up!");
+
+        /* if we're hanging up during an active call, end the call */
+        if (callState == IN_CALL) {
+          endCall();
+          callState = NOT_IN_CALL;
+        }
+
         doDialNumber = false;
         break;
       }
@@ -217,7 +291,4 @@ void loop() {
     Serial.print("\n");
     if (doDialNumber) dialNumber(numberString);
   }
-  // else {
-  //   Serial.println("on hook");
-  // }
 }
