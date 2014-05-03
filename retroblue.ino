@@ -269,6 +269,7 @@ void loop() {
   }
   
   if (hook == OFF_HOOK) {
+    delay(100);
     Serial.println("OFF hook");
     
     if (ringState == RINGING) {
