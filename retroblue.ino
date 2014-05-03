@@ -79,8 +79,11 @@ const int INTER_PULSE_TIME = 42;
 const int TOTAL_PULSE_INTERVAL_TIME = PULSE_TIME + INTER_PULSE_TIME;
 
 /* command and response line endings  */
-String COMMAND_TERMINATOR = "\r";
-String RESPONSE_TERMINATOR = "\r\n";
+const String COMMAND_TERMINATOR = "\r";
+const String RESPONSE_TERMINATOR = "\r\n";
+
+/* the string the Bluetooth module sends when a command is successful */
+const String SUCCESS = "AOK";
 
 /* the amount of time we give the Bluetooth module to send a response, in ms */
 const int RESPONSE_WAIT_TIME = 3000;
@@ -311,6 +314,8 @@ void loop() {
     }
     
     Serial.print("\n");
-    if (doDialNumber) dialNumber(numberString);
+    if (doDialNumber) {
+      if (dialNumber(numberString) == SUCCESS) callState = IN_CALL;
+    }
   }
 }
