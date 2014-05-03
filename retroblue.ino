@@ -17,7 +17,7 @@ const int hookPin = 4;
 const int eventPin = 7;
 const int resetPin = 12;
 
-/* other pins */
+/* pin used to activate the ringing solenoid */
 const int solenoidPin = 5;
 
 /* ringing state */
