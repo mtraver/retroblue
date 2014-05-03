@@ -70,6 +70,14 @@ int hook;
 const int OFF_HOOK = 0;
 const int ON_HOOK = 1;
 
+/* Time in milliseconds that various parts of the dialing cycle take.
+ * Used for detecting which number has been dialed based on the time
+ * elapsed during a dialing cycle. These times should probably be tuned
+ * for your specific phone.  */
+const int PULSE_TIME = 67;
+const int INTER_PULSE_TIME = 42;
+const int TOTAL_PULSE_INTERVAL_TIME = PULSE_TIME + INTER_PULSE_TIME;
+
 /* command and response line endings  */
 String COMMAND_TERMINATOR = "\r";
 String RESPONSE_TERMINATOR = "\r\n";
@@ -215,6 +223,32 @@ void doRingTick() {
   // Serial.println(solenoidOut);
 }
 
+/* Detects and returns a dialed number based on the total time bewteen the
+ * first pulse and the dial coming to rest. Will block until either a number
+ * is dialed or the phone is hung up. Returns the dialed number (in range [1, 10]),
+ * or -1 in the case of error or hang up. */
+int getDialedNumber() {
+  readState();
+  while (dialing == IS_DIALING && hook == OFF_HOOK) {
+    readState();
+    if (pulse == PULSE) {
+      long startTime = millis();
+
+      while (dialing == IS_DIALING) {
+        readState();
+        if (hook == ON_HOOK) return -1;
+      }
+
+      long elapsedTime = millis() - startTime;
+
+      /* compute dialed number from elapsed time */
+      return elapsedTime / TOTAL_PULSE_INTERVAL_TIME;
+    }
+  }
+
+  return -1;
+}
+
 void loop() {
   readState();
 
@@ -244,36 +278,14 @@ void loop() {
     boolean doDialNumber = true;
     
     for (int numCount = 0; numCount < 10; numCount++) {
-      int dialedNumber = 0;
-      
       /* wait for the user to start dialing a number */
       readState();
       while (dialing == NOT_DIALING && hook == OFF_HOOK) {
         readState();
       }
       delay(15);
-      
-      /* while the dial is returning... */
-      readState();
-      while (dialing == IS_DIALING && hook == OFF_HOOK) {
-        /* wait for pulse interval to finish */
-        readState();
-        while (pulse == PULSE) {
-          readState();
-          if (dialing == NOT_DIALING || hook == ON_HOOK) break;
-        }
-        delay(70);
-        
-        /* wait for between-pulse interval to finish */
-        readState();
-        while (pulse == NO_PULSE) {
-          readState();
-          if (dialing == NOT_DIALING || hook == ON_HOOK) break;
-        }
-        delay(33);
-        
-        dialedNumber++;
-      }
+
+      int dialedNumber = getDialedNumber();
       
       readState();
       if (hook == ON_HOOK) {
@@ -288,9 +300,6 @@ void loop() {
         doDialNumber = false;
         break;
       }
-      
-      /* one extra pulse is registered when dialing (i.e. 5 is sensed when 4 is dialed), so decrement */
-      dialedNumber--;
 
       /* the phone dials a 0 as if it were a 10, so fix that */
       dialedNumber = dialedNumber % 10;
