@@ -31,8 +31,7 @@ const int NOT_IN_CALL = 0;
 const int IN_CALL = 1;
 int callState = NOT_IN_CALL;
 
-/* The number of times we've rung so far. */
-const int NUM_LOOP_ITERS_PER_RING_STATE = 2;
+const int NUM_LOOP_ITERS_PER_RING_STATE = 3;
 
 /* The number of times we've passed in the loop in the current solenoidOut
  * state. This is modulus NUM_LOOP_ITERS_PER_RING_STATE. */
@@ -40,6 +39,12 @@ int loopItersInRingState = 0;
 
 /* true = solenoid extended; false = retracted */
 boolean solenoidOut = true;
+
+/* used to manage ring pulses */
+const int RING_INTERVAL_LENGTH = 100;
+const float PERCENT_RINGING = 0.6;
+const float RINGING_TIME = RING_INTERVAL_LENGTH * PERCENT_RINGING;
+int ringIntervalCount = 0;
 
 /* state of pulse switch
  * 1 during dialing pulse
@@ -195,13 +200,19 @@ void stopRinging() {
 }
 
 void doRingTick() {
-  if (loopItersInRingState == 0) {
-    digitalWrite(solenoidPin, solenoidOut ? LOW : HIGH);
-    solenoidOut = !solenoidOut;
+  if (ringIntervalCount < RINGING_TIME && loopItersInRingState == 0) {
+      digitalWrite(solenoidPin, HIGH);
+      solenoidOut = true;
+  } else if (solenoidOut) {
+    digitalWrite(solenoidPin, LOW);
+    solenoidOut = false;
   }
+
+  ringIntervalCount = (ringIntervalCount + 1) % RING_INTERVAL_LENGTH;
   loopItersInRingState = (loopItersInRingState + 1) % NUM_LOOP_ITERS_PER_RING_STATE;
-  Serial.print("Solenoid state: ");
-  Serial.println(solenoidOut);
+  delay(20);
+  // Serial.print("Solenoid state: ");
+  // Serial.println(solenoidOut);
 }
 
 void loop() {
