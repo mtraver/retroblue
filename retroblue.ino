@@ -124,15 +124,17 @@ String issueCommand(String command, boolean checkForTerminator) {
     if (bluetooth.available() > 0) buffer.concat(char(bluetooth.read()));
     
     if (checkForTerminator && buffer.endsWith(RESPONSE_TERMINATOR)) {
-      Serial.println("Got EOL. Printing buffer:");
+      /* chop off terminator */
+      buffer = buffer.substring(0, buffer.length() - RESPONSE_TERMINATOR.length());
+
+      Serial.print("Got EOL. Received:");
       Serial.println(buffer);
 
-      /* chop off terminator before returning response */
-      return buffer.substring(0, buffer.length() - RESPONSE_TERMINATOR.length());
+      return buffer;
     }
   }
   
-  Serial.println("End of wait. Printing buffer:");
+  Serial.println("End of wait. Received:");
   Serial.println(buffer);
   return buffer;
 }
