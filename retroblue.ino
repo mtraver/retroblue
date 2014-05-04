@@ -244,8 +244,9 @@ int getDialedNumber() {
 
       long elapsedTime = millis() - startTime;
 
-      /* compute dialed number from elapsed time */
-      return elapsedTime / TOTAL_PULSE_INTERVAL_TIME;
+      /* compute dialed number from elapsed time;
+       * mod 10 because the phone dials a 0 as if it were a 10 */
+      return (elapsedTime / TOTAL_PULSE_INTERVAL_TIME) % 10;
     }
   }
 
@@ -304,9 +305,6 @@ void loop() {
         doDialNumber = false;
         break;
       }
-
-      /* the phone dials a 0 as if it were a 10, so fix that */
-      dialedNumber = dialedNumber % 10;
       
       numberString = numberString + dialedNumber;
       
