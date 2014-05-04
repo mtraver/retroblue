@@ -1,7 +1,7 @@
 /* Arduino code used to turn a vintage rotary phone
  * into a 21st century Bluetooth accessory.
  * 
- * Project based on tutorial at https://www.sparkfun.com/products/retired/8929.
+ * Project inspired by tutorial at https://www.sparkfun.com/products/retired/8929.
  */
 
 #include <SoftwareSerial.h>
