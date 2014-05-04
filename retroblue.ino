@@ -289,6 +289,7 @@ void loop() {
       delay(15);
 
       int dialedNumber = getDialedNumber();
+      delay(20);
       
       readState();
       if (hook == ON_HOOK) {
