@@ -1,9 +1,7 @@
 /* Arduino code used to turn a vintage rotary phone
  * into a 21st century Bluetooth accessory.
  * 
- * Project (most specifically, the code that detects
- * dialed numbers) based on tutorial and code at
- * https://www.sparkfun.com/products/retired/8929.
+ * Project based on tutorial at https://www.sparkfun.com/products/retired/8929.
  */
 
 #include <SoftwareSerial.h>
