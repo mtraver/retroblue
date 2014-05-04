@@ -143,7 +143,7 @@ String issueCommand(String command, boolean checkForTerminator) {
       /* chop off terminator */
       buffer = buffer.substring(0, buffer.length() - RESPONSE_TERMINATOR.length());
 
-      Serial.print("Got EOL. Received:");
+      Serial.print("Got EOL. Received: ");
       Serial.println(buffer);
 
       return buffer;
