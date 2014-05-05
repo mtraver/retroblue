@@ -29,6 +29,7 @@
 *.aux
 *.fdb_latexmk
 *.out
+*.synctex*
 *.toc
 
 # OS generated files #
@@ -41,3 +42,4 @@ Thumbs.db
 # Project-specific files #
 ##########################
 13_solan_tingley_traver.pdf
+Team13_ES50_Final_Report_2014.pdf
