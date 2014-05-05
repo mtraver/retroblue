@@ -259,7 +259,7 @@ void loop() {
   // check the status if some noise happens to come through?
   int event = digitalRead(eventPin);
   if (event == 0) {
-    Serial.println("Event detected!");
+    Serial.println("Event detected");
     updateStatuses();
   }
 
@@ -293,7 +293,7 @@ void loop() {
       
       readState();
       if (hook == ON_HOOK) {
-        Serial.println("hung up!");
+        Serial.println("ON hook");
 
         /* if we're hanging up during an active call, end the call */
         if (callState == IN_CALL) {
