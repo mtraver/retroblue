@@ -1,7 +1,12 @@
 \documentclass{es50report}
 
+\usepackage{setspace}
+
+\usepackage{palatino}
+
+
 \title{RetroBlue}
-\description{A Bluetooth-enabled vintage rotary phone that can be paired with a cell phone to make and receive calls.}
+\projDescription{A Bluetooth-enabled vintage rotary phone that can be paired with a cell phone to make and receive calls.}
 \authors{Kyle Solan, Michael Tingley, and Michael Traver}
 
 \begin{document}
@@ -11,6 +16,7 @@
         RetroBlue is a modern cell phone accessory with an old-timey feel. We took a vintage rotary phone, an Arduino board, and a Bluetooth chip and combined them to create RetroBlue, a fully functional Bluetooth accessory that can make, dial, and receive calls via a cell phone. A user simply pairs his or her cell phone with RetroBlue and all calls are then forwarded to the unit. We worked extensively to convert the antiquated circuitry within the phone to portable battery-powered components and developed custom code and circuitry to pass calls to and from the rotary phone's hardware.
     \end{abstract}
     \newpage
+    \doublespacing
 
     \section{Introduction}
     TODO
@@ -25,7 +31,22 @@
     TODO
 
     \section{Team Management}
-    TODO
+        We all worked collaboratively on most parts of the project. We all came into the project with similar background; all of us are computer science majors that are generally comfortable with coding but not very comfortable with the hardware side of the project. Nonetheless, there were a few areas of specialization that each member took responsibility for.
+
+        \begin{description}
+            \item[Dial pulses and handset]
+                Michael Traver was responsible for a lot of the hardware wiring. He worked on figuring out where each wire should be attached in order to sense a dial pulse or to sense the state of the handset (on the hook/off the hook). Michael Tingley improved the code for pulse sensing. Instead of sensing each pulse individually, he came up with the algorithm to listen for the `length' of the input to determine which number was dialed, which proved to be more accurate.
+            \item[The ringer]
+                Michael Tingley was responsible for much of the work with the ringer. He was responsible for early prototyping of a ringer and for designing the relay circuit to fire the solenoid. Kyle Solan was responsible for the engineering that went into the final ringer. Kyle modified the original ringer and mounted the new one, and configured the solenoid and tweaked the code in order to produce a sound that could be convincing for a 1940s-style ring.
+            \item[Microphone and speaker]
+                Kyle and Traver did most of the work on the microphone and ringer. Traver worked diligently to reduce echo and increase volume of the microphone. Kyle was responsible for speaker output. Both worked on figuring out how mic biasing works (e.g., what configuration of capacitors to use), and how to correctly ground the circuit. (We had some issues with grounding the circuit because both the speaker and the microphone used the same cable for grounding.)
+            \item[Bluetooth module]
+                Everyone on the team worked on the bluetooth module. This was easily the hardest part of the project. We had issues soldering, using the correct voltages and baud rates, providing the correct power, and reading the output using the correct encoding. It's difficult to break down each challenge by who solved it, since we all pooled our brainpower when trying to decipher cryptic tutorials online or debugging the circuits with the oscilloscope and multimeter.
+            \item[Changing voltages]
+                Throughout working with the bluetooth module, we found out that it only accepted/output 3.3V signals. Since the Arduino worked with 5V signals, this turned out to be a problem. Tingley and Traver worked on rigging up circuits to fix this. To convert 5V to 3.3V, we were able to use a simple voltage divider. However, to convert 3.3V to 5V, we had to use a more complex setup of transistors and a 5V input bias. (In the end, the Arduino turned out to be sensitive enough to 3.3V as opposed to 5V, and so we were able to exclude this circuit in the final project.)
+            \item[Circuit reduction, portability]
+                Traver and Kyle worked on making the circuit smaller and more portable. This involved condensing everything from 3 long circuit boards to a single short one. In addition, they worked on trimming wires as appropriate and carefully compacting everything inside of the phone case so that the device could be made portable. All three of us worked on wiring up the circuit with batteries and making it portable!
+        \end{description}
 
     \section{Outlook and Possible Improvements}
     TODO
