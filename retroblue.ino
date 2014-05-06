@@ -6,6 +6,8 @@
 
 #include <SoftwareSerial.h>
 
+const boolean DEBUG = true;
+
 /* pins used to detect the signals from the phone */
 const int pulsePin = 2;
 const int dialingPin = 3;
@@ -119,6 +121,14 @@ void setup() {
   bluetooth.listen();
 }
 
+void print(String s) {
+  if (DEBUG) Serial.print(s);
+}
+
+void println(String s) {
+  if (DEBUG) Serial.println(s);
+}
+
 /* reads signals from the phone and updates dialing state variables */
 void readState() {
   pulse = digitalRead(pulsePin);
@@ -128,7 +138,7 @@ void readState() {
 
 /* properly terminates the given command, sends it to the Bluetooth module, and waits for a response */
 String issueCommand(String command, boolean checkForTerminator) {
-  Serial.println("Issuing command '" + command + "'");
+  println("Issuing command '" + command + "'");
   
   bluetooth.print(command + COMMAND_TERMINATOR);
   
@@ -141,15 +151,15 @@ String issueCommand(String command, boolean checkForTerminator) {
       /* chop off terminator */
       buffer = buffer.substring(0, buffer.length() - RESPONSE_TERMINATOR.length());
 
-      Serial.print("Got EOL. Received: ");
-      Serial.println(buffer);
+      print("Got EOL. Received: ");
+      println(buffer);
 
       return buffer;
     }
   }
   
-  Serial.println("End of wait. Received:");
-  Serial.println(buffer);
+  println("End of wait. Received:");
+  println(buffer);
   return buffer;
 }
 
@@ -187,14 +197,14 @@ void updateStatuses() {
   char lastChar = status.charAt(status.length() - 1);
 
   if (lastChar == '5') {
-    Serial.println("Incoming call.");
+    println("Incoming call.");
     startRinging();
   } else {
     stopRinging();
   }
 
-  Serial.print("Processed status: ");
-  Serial.println(status);
+  print("Processed status: ");
+  println(status);
 }
 
 void startRinging() {
@@ -220,8 +230,8 @@ void doRingTick() {
   ringIntervalCount = (ringIntervalCount + 1) % RING_INTERVAL_LENGTH;
   loopItersInRingState = (loopItersInRingState + 1) % NUM_LOOP_ITERS_PER_RING_STATE;
   delay(20);
-  // Serial.print("Solenoid state: ");
-  // Serial.println(solenoidOut);
+  print("Solenoid state: ");
+  println(solenoidOut);
 }
 
 /* Detects and returns a dialed number based on the total time bewteen the
@@ -259,7 +269,7 @@ void loop() {
   // check the status if some noise happens to come through?
   int event = digitalRead(eventPin);
   if (event == 0) {
-    Serial.println("Event detected");
+    println("Event detected");
     updateStatuses();
   }
 
@@ -269,7 +279,7 @@ void loop() {
   
   if (hook == OFF_HOOK) {
     delay(100);
-    Serial.println("OFF hook");
+    println("OFF hook");
     
     if (ringState == RINGING) {
       acceptCall();
@@ -293,7 +303,7 @@ void loop() {
       
       readState();
       if (hook == ON_HOOK) {
-        Serial.println("ON hook");
+        println("ON hook");
 
         /* if we're hanging up during an active call, end the call */
         if (callState == IN_CALL) {
@@ -307,11 +317,11 @@ void loop() {
       
       numberString = numberString + dialedNumber;
       
-      Serial.print(dialedNumber);
-      if (numCount == 2 || numCount == 5) Serial.print("-");
+      print(dialedNumber);
+      if (numCount == 2 || numCount == 5) print("-");
     }
     
-    Serial.print("\n");
+    print("\n");
     if (doDialNumber) {
       if (dialNumber(numberString) == SUCCESS) callState = IN_CALL;
     }
