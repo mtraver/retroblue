@@ -4,6 +4,8 @@
 
 \usepackage{palatino}
 
+\usepackage{url}
+
 
 \title{RetroBlue}
 \projDescription{A Bluetooth-enabled vintage rotary phone that can be paired with a cell phone to make and receive calls.}
@@ -24,7 +26,7 @@
     \section{Design}
         We had clear goals and objectives that guided much of the design process for our project. We wanted to emulate the experience of using a vintage rotary phone, but rotary phones interface poorly with modern landlines, and furthermore, landlines are becoming less and less common altogether. A rotary phone that operates as a cell phone was an early idea, but it seemed inconvenient to have a dedicated ``cell phone'' that was actually a rotary desktop phone. We thought this would be better suited as a desktop accessory that could pair with a cellphone.
         
-        The Bluetooth Hands-Free Profile (http://en.wikipedia.org/wiki/Bluetooth\_profile\#Hands-Free\_Profile\_.28HFP.29) is a set of standards and protocols commonly used in car Bluetooth accessories that allow an external device to handle a cell phone's dialing, calling, and receiving operations. We thought we could use these to create our ``desktop accessory'' and build a free-standing vintage phone that pairs easily with cell phones. We found a number of Bluetooth chips online that supported HFP and provided a serial interface for communication.
+        The Bluetooth Hands-Free Profile (\url{http://en.wikipedia.org/wiki/Bluetooth_profile#Hands-Free_Profile_.28HFP.29}) is a set of standards and protocols commonly used in car Bluetooth accessories that allow an external device to handle a cell phone's dialing, calling, and receiving operations. We thought we could use these to create our ``desktop accessory'' and build a free-standing vintage phone that pairs easily with cell phones. We found a number of Bluetooth chips online that supported HFP and provided a serial interface for communication.
         
         Traditional landline phones are made up of very simple hardware. The hardware itself is merely responsible for transmitting and outputting signals sent via the landline, and all logic and signal interpretation is carried out by the service provider. Our system, in contrast, needed to be aware of its own state, interpret its own signals, and transmit all this information to the Bluetooth module via digital serial communication. For this we elected to use an Arduino board, which provided the ability to interface with our diverse set of components and design our own event-handling logic.
 
