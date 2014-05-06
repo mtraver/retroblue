@@ -37,8 +37,8 @@
 \let\@title\relax
 \def\title#1{\def\@title{#1}}
 
-\let\@description\relax
-\def\description#1{\def\@description{#1}}
+\let\@projDescription\relax
+\def\projDescription#1{\def\@projDescription{#1}}
 
 \let\@authors\relax
 \def\authors#1{\def\@authors{#1}}
@@ -55,7 +55,7 @@
         Cambridge, MA \\
         \bigskip\bigskip\bigskip\bigskip\bigskip
         
-        \textbf{Description:} \@description \\
+        \textbf{Description:} \@projDescription \\
         \bigskip
 
         \textbf{By:} \@authors \\
