@@ -15,7 +15,6 @@ const int hookPin = 4;
 
 /* pins used to communicate with the Bluetooth module */
 const int eventPin = 7;
-const int resetPin = 12;
 
 /* pin used to activate the ringing solenoid */
 const int solenoidPin = 5;
@@ -119,7 +118,6 @@ void setup() {
   pinMode(eventPin, INPUT);
   digitalWrite(eventPin, HIGH);
   
-  pinMode(resetPin, OUTPUT);
   pinMode(solenoidPin, OUTPUT);
 
   bluetooth.listen();
