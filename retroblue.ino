@@ -96,7 +96,7 @@ const int RESPONSE_WAIT_TIME = 3000;
 SoftwareSerial bluetooth(10, 11);
 
 void setup() {
-  Serial.begin(9600);
+  if (DEBUG) Serial.begin(9600);
   bluetooth.begin(9600);
 
   /* tell pin to use internal pull-up resistor */
@@ -231,7 +231,7 @@ void doRingTick() {
   loopItersInRingState = (loopItersInRingState + 1) % NUM_LOOP_ITERS_PER_RING_STATE;
   delay(20);
   print("Solenoid state: ");
-  println(solenoidOut);
+  println("" + solenoidOut);
 }
 
 /* Detects and returns a dialed number based on the total time bewteen the
@@ -317,7 +317,7 @@ void loop() {
       
       numberString = numberString + dialedNumber;
       
-      print(dialedNumber);
+      print("" + dialedNumber);
       if (numCount == 2 || numCount == 5) print("-");
     }
     
