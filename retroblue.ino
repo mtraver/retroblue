@@ -278,7 +278,7 @@ void loop() {
   }
   
   if (hook == OFF_HOOK) {
-    delay(100);
+    delay(175);
     println("OFF hook");
     
     if (ringState == RINGING) {
