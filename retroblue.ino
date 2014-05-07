@@ -88,6 +88,10 @@ const String SUCCESS = "AOK";
 /* the amount of time we give the Bluetooth module to send a response, in ms */
 const int RESPONSE_WAIT_TIME = 3000;
 
+/* constants returned by getDialedNumber */
+const int INVALID_DIAL = -1;
+const int TIMED_OUT = -2;
+
 /* Arduino Uno only has one hardware serial interface, so set up a software
  * serial interface for communicating with the Bluetooth module.
  *
@@ -231,7 +235,7 @@ void doRingTick() {
   loopItersInRingState = (loopItersInRingState + 1) % NUM_LOOP_ITERS_PER_RING_STATE;
   delay(20);
   print("Solenoid state: ");
-  println("" + solenoidOut);
+  println(String(solenoidOut));
 }
 
 /* Detects and returns a dialed number based on the total time bewteen the
@@ -247,7 +251,7 @@ int getDialedNumber() {
 
       while (dialing == IS_DIALING) {
         readState();
-        if (hook == ON_HOOK) return -1;
+        if (hook == ON_HOOK) return INVALID_DIAL;
       }
 
       long elapsedTime = millis() - startTime;
@@ -258,7 +262,7 @@ int getDialedNumber() {
     }
   }
 
-  return -1;
+  return INVALID_DIAL;
 }
 
 void loop() {
@@ -317,7 +321,7 @@ void loop() {
       
       numberString = numberString + dialedNumber;
       
-      print("" + dialedNumber);
+      print(String(dialedNumber));
       if (numCount == 2 || numCount == 5) print("-");
     }
     
