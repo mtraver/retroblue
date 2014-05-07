@@ -324,10 +324,15 @@ void loop() {
         break;
       }
       
-      numberString = numberString + dialedNumber;
+      /* only record the latest number dialed if it's valid */
+      if (dialedNumber != INVALID_DIAL) {
+        numberString = numberString + dialedNumber;
       
-      print(String(dialedNumber));
-      if (numCount == 2 || numCount == 5) print("-");
+        print(String(dialedNumber));
+        if (numCount == 2 || numCount == 5) print("-");
+      } else {
+        numCount--;
+      }
     }
     
     print("\n");
