@@ -256,9 +256,14 @@ int getDialedNumber() {
 
       long elapsedTime = millis() - startTime;
 
-      /* compute dialed number from elapsed time;
-       * mod 10 because the phone dials a 0 as if it were a 10 */
-      return (elapsedTime / TOTAL_PULSE_INTERVAL_TIME) % 10;
+      /* compute dialed number from elapsed time; mod 10 because the phone dials a 0 as if it were a 10 */
+      int dialedNumber = elapsedTime / TOTAL_PULSE_INTERVAL_TIME;
+      if (dialedNumber <= 10) {
+        return dialedNumber % 10;
+      } else {
+        /* if we got a number greater than 10, something went wrong */
+        return INVALID_DIAL;
+      }
     }
   }
 
