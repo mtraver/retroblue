@@ -25,7 +25,13 @@
     \doublespacing
 
     \section{Introduction}
-    TODO
+    Hello. 
+    
+    Long before the era of laptops, iPads, and smartphones, the rotary phone was a ubiquitous tool of communication. With its charming spinning rotary dial, classic twin-bell ringer, and delightfully hefty handset,  the rotary phone provided many novelties that have since been lost in the deluge of modern high-tech gadgetry. We wanted to bring back the simplicity and fun of using a rotary phone, while still incorporating the conveniences of modern technologies. We believe we've done so with RetroBlue.
+    
+    RetroBlue is a portable and fully operational Bluetooth accessory for modern mobile phones. It can dial, make, and receive calls, and it is built using nearly all of the original hardware of a 1940s Stromberg Carlson rotary phone. Users simply pair their cell phone with RetroBlue, and whenever they are in range all cell phone calls will be forwarded to the rotary phone. Users can put it on a desk or table, and whenever they are at home they can make and receive calls via RetroBlue instead of their cell phone handset, all without the need for a dedicated landline or phone jack. 
+    
+    RetroBlue is an authentic antique and a fully functional modern Bluetooth accessory, all in one. We think that's pretty cool.
 
     \section{Design}
         We had clear goals and objectives that guided much of the design process for our project. We wanted to emulate the experience of using a vintage rotary phone, but rotary phones often interface poorly with modern landlines, and furthermore, landlines are becoming less and less common altogether. So, we decided that a creating a desktop accessory that can pair with a cell phone via Bluetooth was the best way to achieve this.
@@ -42,11 +48,10 @@
 
     \section{Parts List}
         \begin{description}
-            \item[Rotary phone.] A standard functional rotary telephone. As far as we can find, these are no longer manufactured, and most modern ``vintage'' telephones have fake rotary dials with touch-tone keys. We want the real thing, so we'll likely have to resort to eBay (\url{http://www.ebay.com/sch/i.html?_trksid=p2050601.m570.l1313.TR12.TRC2.A0.H0.Xrotary+phone&_nkw=rotary+phone&_sacat=0&_from=R40}). Estimated price is \$20-40 with shipping.
-            \item[Bluetooth audio module.] An integrated circuit with Bluetooth transmitter and simple firmware. We intend to use the chipset to interface with a cell phone, with the ability to receive and dial/make calls. This means we need a chipset that supports the hands-free profile (HFP). We have found a chipset that meets these requirements and includes a very comprehensive user manual detailing operation and the chipset API (\url{http://www.digikey.com/product-detail/en/RN52-I%2FRM/RN52-I%2FRM-ND/3884028}). Price is \$23.30 before shipping.
-            \item[LCD module.] A small display for displaying caller ID information to users. We think 24 alphanumeric characters should be sufficient, and the following display will be adequate: \url{http://www.digikey.com/product-detail/en/NHD-0212WH-AYGH-JT%23/NHD-0212WH-AYGH-JT%23-ND/1701138}. Price is \$9.70 before shipping.
-            \item[Arduino board.] Needed as the logic center for our system. We will write a substantial amount of code to power the Arduino and use it to process data from the Bluetooth module and rotary phone and output it to the LCD/Bluetooth module.
-            \item[Misc. electrical components.] Wires, solder, op-amps, etc.
+            \item[Rotary phone.] A Stromberg Carlson 1940s-era rotary telephone. We acquired this telephone via eBay for \$34.98.
+            \item[Bluetooth audio module.] A Roving Networks RN-52 Bluetooth module (\url{https://www.sparkfun.com/products/11777}). Price was \$44.95 with shipping.
+            \item[Arduino board.] An Arduino Nano, acquired in lab (\url{https://www.sparkfun.com/products/11021}). Price is \$24.95.
+            \item[Misc. electrical components.] Wires, relays, breadboard, capacitors, etc.
         \end{description}
 
     \section{Project Implementation}
