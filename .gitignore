@@ -31,6 +31,8 @@
 *.out
 *.synctex*
 *.toc
+*.bbl
+*.blg
 
 # OS generated files #
 ######################
