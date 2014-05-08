@@ -232,8 +232,6 @@ void doRingTick() {
   ringIntervalCount = (ringIntervalCount + 1) % RING_INTERVAL_LENGTH;
   loopItersInRingState = (loopItersInRingState + 1) % NUM_LOOP_ITERS_PER_RING_STATE;
   delay(20);
-  print("Solenoid state: ");
-  println(String(solenoidOut));
 }
 
 /* Detects and returns a dialed number based on the total time bewteen the
