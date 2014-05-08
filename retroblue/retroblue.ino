@@ -1,9 +1,12 @@
-/* Arduino code used to turn a vintage rotary phone
+/********************************************************
+ * Arduino code used to turn a vintage rotary phone
  * into a 21st century Bluetooth accessory.
  * 
- * Project inspired by tutorial at https://www.sparkfun.com/products/retired/8929.
- */
+ * Project inspired by tutorial at
+ * https://www.sparkfun.com/products/retired/8929.
+ ********************************************************/
 
+#include "rn52.h"
 #include <SoftwareSerial.h>
 
 const boolean DEBUG = true;
@@ -77,15 +80,8 @@ const int PULSE_TIME = 67;
 const int INTER_PULSE_TIME = 42;
 const int TOTAL_PULSE_INTERVAL_TIME = PULSE_TIME + INTER_PULSE_TIME;
 
-/* command and response line endings  */
-const String COMMAND_TERMINATOR = "\r";
-const String RESPONSE_TERMINATOR = "\r\n";
-
 /* the string the Bluetooth module sends when a command is successful */
 const String SUCCESS = "AOK";
-
-/* the amount of time we give the Bluetooth module to send a response, in ms */
-const int RESPONSE_WAIT_TIME = 3000;
 
 /* constants returned by getDialedNumber */
 const int INVALID_DIAL = -1;
@@ -96,11 +92,13 @@ const int TIMED_OUT = -2;
  *
  * RX = digital pin 10, TX = digital pin 11
  */
-SoftwareSerial bluetooth(10, 11);
+SoftwareSerial bluetoothSerial(10, 11);
+
+RN52 rn52 = RN52(&bluetoothSerial);
 
 void setup() {
   if (DEBUG) Serial.begin(9600);
-  bluetooth.begin(9600);
+  bluetoothSerial.begin(9600);
 
   /* tell pin to use internal pull-up resistor */
   pinMode(pulsePin, INPUT);
@@ -120,7 +118,7 @@ void setup() {
   
   pinMode(solenoidPin, OUTPUT);
 
-  bluetooth.listen();
+  bluetoothSerial.listen();
 }
 
 void print(String s) {
@@ -138,64 +136,12 @@ void readState() {
   hook = digitalRead(hookPin);
 }
 
-/* properly terminates the given command, sends it to the Bluetooth module, and waits for a response */
-String issueCommand(String command, boolean checkForTerminator) {
-  println("Issuing command '" + command + "'");
-  
-  bluetooth.print(command + COMMAND_TERMINATOR);
-  
-  unsigned long startTime = millis();
-  String buffer;
-  while (startTime + RESPONSE_WAIT_TIME > millis()) {
-    if (bluetooth.available() > 0) buffer.concat(char(bluetooth.read()));
-    
-    if (checkForTerminator && buffer.endsWith(RESPONSE_TERMINATOR)) {
-      /* chop off terminator */
-      buffer = buffer.substring(0, buffer.length() - RESPONSE_TERMINATOR.length());
-
-      print("Got EOL. Received: ");
-      println(buffer);
-
-      return buffer;
-    }
-  }
-  
-  println("End of wait. Received:");
-  println(buffer);
-  return buffer;
-}
-
-String dialNumber(String num) {
-  return issueCommand("A," + num, true);
-}
-
-String acceptCall() {
-  return issueCommand("C", true);
-}
-
-String endCall() {
-  return issueCommand("E", true);
-}
-
-String getStatus() {
-  return issueCommand("Q", true);
-}
-
-String getSettings() {
-  return issueCommand("D", false);
-}
-
-String getModuleHelp() {
-  return issueCommand("H", false);
-}
-
-String getFirmwareVersion() {
-  return issueCommand("V", false);
-}
-
 /* updates ringing/call status */
 void updateStatuses() {
-  String status = getStatus();
+  println("Getting Bluetooth module status...");
+  String status = rn52.status();
+  println("Received: " + status);
+  
   char lastChar = status.charAt(status.length() - 1);
 
   if (lastChar == '5') {
@@ -287,7 +233,10 @@ void loop() {
     println("OFF hook");
     
     if (ringState == RINGING) {
-      acceptCall();
+      println("Accepting call...");
+      String response = rn52.acceptCall();
+      println("Received: " + response);
+      
       stopRinging();
       callState = IN_CALL;
     }
@@ -312,7 +261,10 @@ void loop() {
 
         /* if we're hanging up during an active call, end the call */
         if (callState == IN_CALL) {
-          endCall();
+          println("Ending call...");
+          String response = rn52.endCall();
+          println("Received: " + response);
+          
           callState = NOT_IN_CALL;
         }
 
@@ -333,7 +285,11 @@ void loop() {
     
     print("\n");
     if (doDialNumber) {
-      if (dialNumber(numberString) == SUCCESS) callState = IN_CALL;
+      println("Dialing " + numberString + "...");
+      String response = rn52.dialNumber(numberString);
+      println("Received: " + response);
+      
+      if (response == SUCCESS) callState = IN_CALL;
     }
   }
 }
