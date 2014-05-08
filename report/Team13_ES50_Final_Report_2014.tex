@@ -126,7 +126,7 @@
         \item Make a call when the user finishes dialing a number.
     \end{itemize}
 
-    The RN-52 exposes a set of ASCII commands that can do all of this quite easily, so all we need to do is send ASCII strings terminated with \verb+\r+ to the RN-52 over its UART serial interface to control it. Take a look at the module's command reference (\cite{rn52CommandRef}) and our code for examples.
+    The RN-52 exposes a set of ASCII commands that can do all of this quite easily, so all we need to do is send carriage return-terminated ASCII strings to the RN-52 over its UART serial interface to control it. Take a look at the module's command reference (\cite{rn52CommandRef}) and our code for examples.
 
     The one issue with serial communication between the Arduino and the RN-52 is voltage levels -- the Arduino Uno uses 5V logic, but the RN-52 uses 3.3V logic. In order to interface the two, we used a simple voltage divider to bring the Arduino's 5V transmit line down to 3.3V before connecting it to the RN-52's receive pin. We then built a 3.3V to 5V voltage level converter circuit to bring the RN-52's 3.3V transmit line up to 5V before connecting it to the Arduino's receive pin \cite{hobbytronics14}, but we discovered that this is not actually necessary -- 3.3V is high enough for the Arduino to accurately receive data from the RN-52. So, for compactness of our final circuit, we omitted the voltage level converter. However, it would likely be a good idea to include real voltage level converters on both serial communication lines in a production version of the circuit to make it as robust as possible.
 
