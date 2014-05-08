@@ -22,7 +22,6 @@
         RetroBlue is a modern cell phone accessory with an old-timey feel. We took a vintage rotary phone, an Arduino board, and a Bluetooth chip and combined them to create RetroBlue, a fully functional Bluetooth accessory that can make, dial, and receive calls via a cell phone. A user simply pairs his or her cell phone with RetroBlue and all calls are then forwarded to the unit. We worked extensively to convert the antiquated circuitry within the phone to portable battery-powered components and developed custom code and circuitry to pass calls to and from the rotary phone's hardware.
     \end{abstract}
     \newpage
-    \doublespacing
 
     \section{Introduction}
     Hello. 
@@ -117,10 +116,22 @@
     \end{figure}
 
     \subsection{Interfacing the Arduino and the Bluetooth Module}
-    TODO
+    We used the RN-52 Bluetooth audio module from Roving Networks. The datasheet is at \cite{rn52Datasheet} and the command reference is at \cite{rn52CommandRef}. The module handles audio input and output, so we don't need to handle that on the Arduino. What we do need to is as follows:
+
+    \begin{itemize}
+        \item Listen for events from the Bluetooth module. Most importantly, we listen for the event that signifies an incoming call. The RN-52 brings one of its pins low when an event occurs, so we continuously read from this pin in the Arduino \verb+loop+ to detect when an event occurs.
+        \item Accept and end calls when the handset is picked up and hung up, respectively.
+        \item Make a call when the user finishes dialing a number.
+    \end{itemize}
+
+    The RN-52 exposes a set of ASCII commands that can do all of this quite easily, so all we need to do is send ASCII strings terminated with \verb+\r+ to the RN-52 over its UART serial interface to control it. Take a look at the module's command reference (\cite{rn52CommandRef}) and our code for examples.
+
+    The one issue with serial communication between the Arduino and the RN-52 is voltage levels -- the Arduino Uno uses 5V logic, but the RN-52 uses 3.3V logic. In order to interface the two, we used a simple voltage divider to bring the Arduino's 5V transmit line down to 3.3V before connecting it to the RN-52's receive pin. We then built a 3.3V to 5V voltage level converter circuit to bring the RN-52's 3.3V transmit line up to 5V before connecting it to the Arduino's receive pin \cite{hobbytronics14}, but we discovered that this is not actually necessary -- 3.3V is high enough for the Arduino to accurately receive data from the RN-52. So, for compactness of our final circuit, we omitted the voltage level converter. However, it would likely be a good idea to include real voltage level converters on both serial communication lines in a production version of the circuit to make it as robust as possible.
 
     \subsection{Audio}
-    TODO
+    The final piece of the original phone hardware we needed to integrate was the handset. We started with the speaker. The RN-52's datasheet states that it has a built-in amplifier suitable for driving $16\Omega$ speakers \cite{rn52Datasheet}, and even though the handset's speaker tested at $40\Omega$, we hooked it up to the RN-52's audio output pins to give it a try. We played some music over the Bluetooth connection, and it came through loud and clear with surprising clarity. Sweet!
+
+    The microphone took a lot more work. We were able to successfully bias it with a standard microphone biasing circuit and record clear, reasonably good quality audio on a computer, but integrating it with the Bluetooth module was much harder. The first problem is that the handset has only three wires: the speaker and microphone each have a wire directly to them, and the third wire is shared. We tried hooking up the microphone directly to the Bluetooth module, and while we were able to pick up audio, the volume was low and there was some nasty echo due to the shared wire. We then tried to properly bias the microphone, and while the input became louder, voices became unintelligible. However, the RN-52's datasheet contains a set of circuit diagrams labeled ``Typical Application Schematic,'' which includes an audio input circuit \cite{rn52Datasheet}. We built the circuit, and, unsurprisingly, it worked. The audio quality isn't phenomenal, but given the very old hardware, it's passable. We also don't filter the signal to remove noise or background interference, which would likely improve the quality significantly and would be a good addition for a future version of this project.
 
     \subsection{The Code}
     TODO
@@ -155,6 +166,10 @@
                 One of the things that we would like to do is to use  the LCD to display numbers that the user has dialed so far during a dialing sequence. We found that it is very disorienting to dial a number on an old rotary phone. Since you have to wait several seconds between entering numbers, it is very easy to forget where you were. Furthermore, since we read numbers using analog circuitry, it would be useful to get visual feedback that the number was interpreted correctly.
 
                 Additionally, we would like to be able to use the LCD to display caller information. It would be relatively easy to display the incoming number. If possible, we would also like to use the LCD to display the caller's name, using the phonebook in the bluetooth-linked phone. However, this appears to be very difficult, and would require custom phone querying using the data pipe mode on the bluetooth module.
+            \item[Improving audio input]
+                The audio quality from the phone's original microphone isn't great. Filtering the audio signal to remove background noise and signal noise would improve usability a great deal. While we were excited that we were able to get the phone working with the original microphone because we wanted to preserve as much of the original hardware as possible, replacing the microphone with a modern one may be warranted if the quality cannot be improved sufficiently.
+            \item[Dial tone]
+                Playing a dial tone when the user picks up the handset would make the experience even more authentic. There is a tone library for Arduino which makes it incredibly easy to generate the 350Hz and 440Hz tones that constitute a modern North American dial tone. We wrote the code to generate the tones, but we didn't get a chance to integrate it with the rest of the project. We could also generate a 1950's-style dial tone, but this will be less familiar to modern users, so we would probably generate a modern dial tone.
             \item[Texting mode]
                 Assuming we care nothing at all about usability, we would like to include a texting mode. This would be virtually unusable, but the basic idea is that you lift the handset up and wait 10 seconds until you hear a beep from the phone. Then you're in texting mode. You can enter letters using a T9-style input method (if we have the LCD, that can show letters already entered). To enter a letter, you simply wait a number of seconds between entries and the letter will automatically be entered. To send the text, you would put the handset down, and then dial the number to send the text to.
 
