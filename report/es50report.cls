@@ -7,7 +7,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{es50report}[2014/05/05 ES50 Final Project Report Format]
 
-\LoadClass[12pt,letterpaper]{article}
+\LoadClass[11pt,letterpaper]{article}
 
 \usepackage[left=1.25in, right=1.25in, top=1in, bottom=1in]{geometry}
 
