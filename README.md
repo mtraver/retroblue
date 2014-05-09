@@ -5,4 +5,4 @@ RetroBlue is a modern cell phone accessory with an old-timey feel. We took a vin
 
 Our code, developed with Arduino 1.0.5 on an Arduino Uno, is in `retroblue/`. Our project report, which contains a fairly detailed description of our implementation, is in `report/`. 
 
-RetroBlue is a final project for Harvard University's introductory electrical engineering course, Engineering Sciences 50.
+RetroBlue is a final project for Harvard University's introductory electrical engineering course, Engineering Sciences 50. We'd like to acknowledge SparkFun for their efforts in creating a Bluetooth rotary phone, and they were the inspiration for this project. Information on their phone, as well as links to a quick tutorial and some sample code, can be found at <https://www.sparkfun.com/products/retired/8929>.
