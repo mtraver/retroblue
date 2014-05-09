@@ -19,26 +19,26 @@
     \maketitlepage
 
     \begin{abstract}
-        RetroBlue is a modern cell phone accessory with an old-timey feel. We took a vintage rotary phone, an Arduino board, and a Bluetooth chip and combined them to create RetroBlue, a fully functional Bluetooth accessory that can make, dial, and receive calls via a cell phone. The user simply pairs his or her cell phone with RetroBlue and all calls are then forwarded to the unit. We worked extensively to convert the antiquated circuitry within the phone to portable battery-powered components and developed custom code and circuitry to pass calls to and from the rotary phone's hardware.
+        RetroBlue is a modern cell phone accessory with an old-timey feel. We took a vintage rotary phone, an Arduino board, and a Bluetooth chip and combined them to create RetroBlue, a fully functional Bluetooth accessory that can dial and receive calls via a cell phone. The user simply pairs his or her cell phone with RetroBlue and all calls are then forwarded to the unit. We worked extensively to convert the antiquated circuitry within the phone to portable battery-powered components and developed custom code and circuitry to pass calls to and from the rotary phone's hardware.
     \end{abstract}
     \newpage
 
     \section{Introduction}
-    Hello. 
-    
+    Hello.
+
     Long before the era of laptops, iPads, and smartphones, the rotary phone was a ubiquitous tool of communication. With its charming spinning rotary dial, classic twin-bell ringer, and delightfully hefty handset,  the rotary phone provided many novelties that have since been lost in the deluge of modern high-tech gadgetry. We wanted to bring back the simplicity and fun of using a rotary phone, while still incorporating the conveniences of modern technologies. We believe we've done so with RetroBlue.
-    
-    RetroBlue is a portable and fully operational Bluetooth accessory for modern mobile phones. It can dial, make, and receive calls, and it is built using nearly all of the original hardware of a 1940s Stromberg Carlson rotary phone. Users simply pair their cell phone with RetroBlue, and whenever they are in range all cell phone calls will be forwarded to the rotary phone. Users can put it on a desk or table, and whenever they are at home they can make and receive calls via RetroBlue instead of their cell phone handset, all without the need for a dedicated landline or phone jack. 
-    
+
+    RetroBlue is a portable and fully operational Bluetooth accessory for modern mobile phones. It can dial and receive calls, and it is built using nearly all of the original hardware of a 1940s Stromberg Carlson rotary phone. Users simply pair their cell phone with RetroBlue, and whenever they are in range all cell phone calls will be forwarded to the rotary phone. Users can put it on a desk or table, and whenever they are at home they can make and receive calls via RetroBlue instead of their cell phone, all without the need for a dedicated landline or phone jack.
+
     RetroBlue is an authentic antique and a fully functional modern Bluetooth accessory, all in one. We think that's pretty cool.
 
     Our code and designs are available in this project's GitHub repository at \url{https://github.com/mtraver/retroblue}.
 
     \section{Design}
         We had clear goals and objectives that guided much of the design process for our project. We wanted to emulate the experience of using a vintage rotary phone, but rotary phones often interface poorly with modern landlines, and furthermore, landlines are becoming less and less common altogether. So, we decided that a creating a desktop accessory that can pair with a cell phone via Bluetooth was the best way to achieve this.
-        
+
         The Bluetooth standard includes many profiles, or specifications that define a certain type of wireless communication over a Bluetooth connection. The Hands-Free Profile (\url{http://en.wikipedia.org/wiki/Bluetooth_profile#Hands-Free_Profile_.28HFP.29}) allows a device to control a cell phone, including making and receiving calls and transmitting audio to and from the phone, and is commonly used in car Bluetooth accessories. This profile was a natural fit for our project, and we found a number of Bluetooth chips online that support HFP and provide a serial interface for communication.
-        
+
         Traditional landline phones are made up of very simple hardware. The hardware itself is merely responsible for transmitting signals to the telephone exchange and interpreting and outputting signals it receives (such as a ring signal or an audio signal). All logic -- including detecting which number was dialed and routing a call -- is carried out by the service provider. Our system, in contrast, needs to be aware of its own state, interpret its own signals, and transmit all this information to the Bluetooth module via digital serial communication. For this we elected to use an Arduino board, which provides the ability to interface with our diverse set of components and to run our own event-handling logic.
 
         With this basic system in mind, we began our implementation process. Initially, we had the idea to use our Arduino as a simulated service provider and connect it directly to the phone's external data/power line. With this, we would not have needed to modify the phone's internal hardware. This situation, however, quickly proved impractical. Landline phones are meant to run on high voltage (50-90V), and much of the hardware is activated via large voltage fluctuations. This is poorly suited to our goal of having a free-standing portable accessory and would have required a lot of external circuitry to meet these power requirements. Instead, we found we could modernize the phone circuitry to run on a much lower voltage well-suited to battery power (3.3-5V) if we worked directly with each independent component within the phone.
@@ -88,7 +88,7 @@
                 \caption{Dialing, pulse closed}
                 \label{fig:dialIsDialing}
         \end{subfigure}
-        
+
         \begin{subfigure}[b]{0.47\textwidth}
                 \includegraphics[width=\textwidth, clip=true, trim=300 250 300 70]{images/small/dialPulse}
                 \caption{Dialing, pulse open}
