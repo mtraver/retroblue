@@ -1,6 +1,9 @@
 /********************************************************
  * Header file for RN52 Bluetooth audio module support.
  *
+ * Datasheet: http://ww1.microchip.com/downloads/en/DeviceDoc/rn-52-ds-1.1r.pdf
+ * Command reference: http://ww1.microchip.com/downloads/en/DeviceDoc/rn-bt-audio-ug-2.0r.pdf
+ *
  * Code developed in Arduino 1.0.5 on Arduino Uno.
  ********************************************************/
 
